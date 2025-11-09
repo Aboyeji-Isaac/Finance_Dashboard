@@ -1,0 +1,20 @@
+# Finance Dashboard
+
+Features:
+- Invoice create/list/delete/mark-paid (in-memory + Zustand)
+- Live VAT calculation in the form
+- Top metrics and a 6-month revenue bar chart
+- Next.js + TypeScript + Tailwind
+
+## Run locally
+1. Copy files into a Next.js project directory.
+2. `cp .env.example .env.local` and set Appwrite variables if using Appwrite.
+3. `npm install`
+4. `npm run dev`
+5. Open http://localhost:3000
+
+## Next steps
+- Integrate Appwrite DB: on create/update/delete call `databases.createDocument` / `updateDocument`.
+- Add Auth (sign up / login) via Appwrite `account.createEmailSession`.
+- Add validation with `zod` and nicer components (ShadCN).
+- Add pagination, filters, CSV export, and export receipts (PDF generation).
