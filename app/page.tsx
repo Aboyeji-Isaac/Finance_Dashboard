@@ -1,12 +1,13 @@
 "use client";
 
-import ProtectedRoute from "./lib/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardContent from "./DashboardContent";
+import DashboardPage  from "./dashboard/page";
 
 export default function HomePage() {
   return (
     <ProtectedRoute>
-      <DashboardContent />
+      <DashboardPage />
     </ProtectedRoute>
   );
 }

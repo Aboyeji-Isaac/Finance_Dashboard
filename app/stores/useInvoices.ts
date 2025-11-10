@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { databases } from "../lib/appwrite";
 import { ID, Permission, Role, Query } from "appwrite";
-import useAuth from "../lib/useAuth";
+import type { User } from "../lib/useAuth";
 
 // 🔹 Invoice data type
 export type Invoice = {
@@ -24,8 +24,8 @@ export type Invoice = {
 type State = {
   invoices: Invoice[];
   loading: boolean;
-  fetchInvoices: () => Promise<void>;
-  addInvoice: (inv: Omit<Invoice, "$id">) => Promise<void>;
+  fetchInvoices: (user: User) => Promise<void>;
+  addInvoice: (user: User, inv: Omit<Invoice, "$id">) => Promise<void>;
   markPaid: (id: string) => Promise<void>;
   deleteInvoice: (id: string) => Promise<void>;
   totals: () => {
@@ -36,15 +36,14 @@ type State = {
   };
 };
 
+// ✅ Zustand store
 export const useInvoiceStore = create<State>((set, get) => ({
   invoices: [],
   loading: false,
 
   // 🔹 Fetch all invoices for current user
-  fetchInvoices: async () => {
-    const { user } = useAuth.getState();
+  fetchInvoices: async (user) => {
     if (!user) return;
-
     set({ loading: true });
     try {
       const res = await databases.listDocuments(
@@ -52,7 +51,24 @@ export const useInvoiceStore = create<State>((set, get) => ({
         process.env.NEXT_PUBLIC_APPWRITE_INVOICES_COLLECTION_ID!,
         [Query.equal("userId", user.$id)]
       );
-      set({ invoices: res.documents as Invoice[] });
+
+      // 🔹 Map Appwrite documents to Invoice type safely
+      const invoices = (res.documents ?? []).map((d: any) => ({
+        $id: d.$id,
+        userId: d.userId,
+        clientName: d.clientName,
+        clientEmail: d.clientEmail,
+        amount: Number(d.amount),
+        vatPercent: Number(d.vatPercent),
+        vatAmount: Number(d.vatAmount),
+        total: Number(d.total),
+        dueDate: String(d.dueDate),
+        status: d.status === "paid" ? "paid" : "unpaid",
+        createdAt: String(d.createdAt),
+        paidAt: d.paidAt ? String(d.paidAt) : undefined,
+      })) as Invoice[];
+
+      set({ invoices });
     } catch (err) {
       console.error("❌ Failed to fetch invoices:", err);
     } finally {
@@ -61,10 +77,8 @@ export const useInvoiceStore = create<State>((set, get) => ({
   },
 
   // 🔹 Add new invoice (with row-level permissions)
-  addInvoice: async (inv) => {
-    const { user } = useAuth.getState();
+  addInvoice: async (user, inv) => {
     if (!user) return;
-
     try {
       const newInv = await databases.createDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
@@ -96,7 +110,9 @@ export const useInvoiceStore = create<State>((set, get) => ({
       );
 
       set((s) => ({
-        invoices: s.invoices.map((i) => (i.$id === id ? (updated as any) : i)),
+        invoices: s.invoices.map((i) =>
+          i.$id === id ? (updated as any) : i
+        ),
       }));
     } catch (err) {
       console.error("❌ Failed to mark invoice paid:", err);
@@ -111,7 +127,9 @@ export const useInvoiceStore = create<State>((set, get) => ({
         process.env.NEXT_PUBLIC_APPWRITE_INVOICES_COLLECTION_ID!,
         id
       );
-      set((s) => ({ invoices: s.invoices.filter((i) => i.$id !== id) }));
+      set((s) => ({
+        invoices: s.invoices.filter((i) => i.$id !== id),
+      }));
     } catch (err) {
       console.error("❌ Failed to delete invoice:", err);
     }

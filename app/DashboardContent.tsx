@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import useAuth from "./lib/useAuth"; // 👈 Add this import
 import InvoiceForm from "./components/InvoiceForm";
-import InvoiceTable from "./components/InvoiceTable";
+import InvoiceTable from "./invoice/InvoiceTable";
 import { useInvoiceStore } from "./stores/useInvoices";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { subMonths, format } from "date-fns";

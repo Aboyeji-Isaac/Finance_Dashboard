@@ -1,3 +1,80 @@
+// import Image from "next/image"
+// import StatusBadge from "./status-badge"
+// import { MoreVertical } from "lucide-react"
+// import type { Invoice } from "../stores/useInvoices";
+
+
+// interface InvoiceRowProps {
+//   invoice: Invoice
+// }
+
+// export default function InvoiceRow({ invoice }: InvoiceRowProps) {
+//   return (
+//     <tr className="hover:bg-gray-50 transition-colors">
+//       {/* Client Column */}
+//       <td className="py-4 px-4">
+//         <div className="flex items-center gap-3">
+//           <div className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center overflow-hidden">
+//             {invoice.avatar ? (
+//               <Image
+//                 src={invoice.avatar || "/placeholder.svg"}
+//                 alt={invoice.name}
+//                 width={40}
+//                 height={40}
+//                 className="w-full h-full object-cover"
+//               />
+//             ) : (
+//               <span className="text-xs font-semibold text-gray-600">{invoice.name.charAt(0)}</span>
+//             )}
+//           </div>
+//           <div className="min-w-0">
+//             <p className="font-semibold text-gray-900 truncate">{invoice.name}</p>
+//             <p className="text-xs text-gray-500">{invoice.invoiceNumber}</p>
+//           </div>
+//         </div>
+//       </td>
+
+//       {/* Date Column */}
+//       <td className="py-4 px-4 hidden md:table-cell">
+//         <div className="text-sm font-medium text-gray-900">{invoice.date}</div>
+//         <div className="text-xs text-gray-500">{invoice.time}</div>
+//       </td>
+
+//       {/* Orders/Type Column */}
+//       <td className="py-4 px-4 hidden lg:table-cell">
+//         <span className="text-sm text-gray-500">{invoice.ordersType}</span>
+//       </td>
+
+//       {/* Amount Column */}
+//       <td className="py-4 px-4">
+//         <span className="font-semibold text-gray-900">{invoice.amount}</span>
+//       </td>
+
+//       {/* Status Column */}
+//       <td className="py-4 px-4 hidden sm:table-cell">
+//         <StatusBadge status={invoice.status} />
+//       </td>
+
+//       {/* Action Column */}
+//       <td className="py-4 px-4 text-center">
+//         <button className="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700">
+//           <MoreVertical className="w-5 h-5" />
+//         </button>
+//       </td>
+//     </tr>
+//   )
+// }
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { useEffect } from "react";
