@@ -10,7 +10,7 @@ const cn = (...classes: (string | undefined | boolean)[]) => classes.filter(Bool
 const navItems = [
   { name: "Dashboard", icon: "/assets/icons/dashboard.svg", href: "/dashboard" },
   { name: "Transactions", icon: "/assets/icons/transactions.svg", href: "/dashboard/transactions" },
-  { name: "Invoices", icon: "/assets/icons/invoices.svg", href: "/dashboard/invoices" },
+  { name: "Invoices", icon: "/assets/icons/invoices.svg", href: "/invoice" },
   { name: "My Wallets", icon: "/assets/icons/MyWallets.svg", href: "/dashboard/wallets" },
   { name: "Settings", icon: "/assets/icons/settings.svg", href: "/dashboard/settings" },
 ];

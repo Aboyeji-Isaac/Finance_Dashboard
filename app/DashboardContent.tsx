@@ -2,8 +2,8 @@
 
 import React, { useMemo } from "react";
 import useAuth from "./lib/useAuth"; // 👈 Add this import
-import InvoiceForm from "./components/InvoiceForm";
-import InvoiceTable from "./invoice/InvoiceTable";
+import InvoiceForm from "./invoice/create/page";
+import InvoiceTable from "./invoice/components/InvoiceTable";
 import { useInvoiceStore } from "./stores/useInvoices";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { subMonths, format } from "date-fns";

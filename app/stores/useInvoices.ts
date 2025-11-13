@@ -5,13 +5,28 @@ import { databases } from "../lib/appwrite";
 import { ID, Permission, Role, Query } from "appwrite";
 import type { User } from "../lib/useAuth";
 
+// 🔹 Invoice Item type
+export type InvoiceItem = {
+  name: string;
+  quantity: number;
+  rate: number;
+  amount: number;
+};
+
 // 🔹 Invoice data type
 export type Invoice = {
   $id?: string;
   userId: string;
+  invoiceNumber: string;
   clientName: string;
   clientEmail: string;
-  amount: number;
+  clientAddress: string;
+  businessName: string;
+  businessAddress: string;
+  items: InvoiceItem[];
+  subtotal: number;
+  discount: number;
+  tax: number;
   vatPercent: number;
   vatAmount: number;
   total: number;
@@ -20,6 +35,7 @@ export type Invoice = {
   createdAt: string;
   paidAt?: string;
 };
+
 
 type State = {
   invoices: Invoice[];
@@ -52,15 +68,22 @@ export const useInvoiceStore = create<State>((set, get) => ({
         [Query.equal("userId", user.$id)]
       );
 
+
       // 🔹 Map Appwrite documents to Invoice type safely
       const invoices = (res.documents ?? []).map((d: any) => ({
         $id: d.$id,
         userId: d.userId,
+        invoiceNumber: d.invoiceNumber,
         clientName: d.clientName,
         clientEmail: d.clientEmail,
-        amount: Number(d.amount),
-        vatPercent: Number(d.vatPercent),
-        vatAmount: Number(d.vatAmount),
+        clientAddress: d.clientAddress,
+        businessName: d.businessName,
+        businessAddress: d.businessAddress,
+        items: Array.isArray(d.items) ? d.items : [],
+        subtotal: Number(d.subtotal),
+        discount: Number(d.discount),
+        tax: Number(d.tax),
+        vatAmount: Number(d.vatAmount) || 0, // ✅ added
         total: Number(d.total),
         dueDate: String(d.dueDate),
         status: d.status === "paid" ? "paid" : "unpaid",
@@ -143,7 +166,7 @@ export const useInvoiceStore = create<State>((set, get) => ({
       .reduce((s, a) => s + a.total, 0);
     const totalVAT = invs
       .filter((i) => i.status === "paid")
-      .reduce((s, a) => s + a.vatAmount, 0);
+      .reduce((s, a) => s + a.tax, 0);
     const pending = invs
       .filter((i) => i.status === "unpaid")
       .reduce((s, a) => s + a.total, 0);
