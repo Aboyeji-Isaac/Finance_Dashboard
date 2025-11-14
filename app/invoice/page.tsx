@@ -24,7 +24,7 @@ export default function InvoicePage() {
   return (
     <div className="space-y-6 p-4 md:p-6">
       <InvoiceHeader search={search} setSearch={setSearch} onCreate={handleCreate} />
-      <InvoiceTable search={search} />
+      {/* <InvoiceTable search={search} /> */}
     </div>
   );
 }
