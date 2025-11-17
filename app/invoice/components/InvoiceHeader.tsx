@@ -9,6 +9,7 @@ type Props = {
 };
 
 export default function InvoiceHeader({ search, setSearch, onCreate }: Props) {
+  
   return (
     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
       {/* Search Bar */}

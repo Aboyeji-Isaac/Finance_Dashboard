@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { account } from "./appwrite";
+import { useRouter } from "next/navigation";
 
 export type User = {
   name: string;
@@ -12,6 +13,7 @@ export type User = {
 export default function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   // Get current session
   useEffect(() => {
@@ -39,10 +41,17 @@ export default function useAuth() {
     await login(email, password);
   };
 
+  // 🔥 Full logout + redirect
   const logout = async () => {
-    await account.deleteSession("current");
-    setUser(null);
+    try {
+      await account.deleteSession("current"); // Remove session from Appwrite
+      setUser(null);                           // Clear user locally
+      router.push("/auth/login");              // Redirect
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
   };
 
   return { user, loading, login, signup, logout };
 }
+//NOTE: The logout button still need some more security features

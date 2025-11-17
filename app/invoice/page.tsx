@@ -17,13 +17,28 @@ export default function InvoicePage() {
     if (user) fetchInvoices(user);
   }, [user, fetchInvoices]);
 
-  const handleCreate = () => router.push("/invoice/create");
+  // ✅ Generate invoice ID (MGL + 6 digits)
+  const generateInvoiceId = () => {
+    const random = Math.floor(100000 + Math.random() * 900000);
+    return `MGL${random}`;
+  };
+
+  // ✅ Updated create handler
+  const handleCreate = () => {
+    const invoiceId = generateInvoiceId();
+    router.push(`/invoice/create?invoiceId=${invoiceId}`);
+  };
 
   if (authLoading) return <p className="text-center py-8">Loading...</p>;
 
   return (
     <div className="space-y-6 p-4 md:p-6">
-      <InvoiceHeader search={search} setSearch={setSearch} onCreate={handleCreate} />
+      <InvoiceHeader
+        search={search}
+        setSearch={setSearch}
+        onCreate={handleCreate}
+      />
+
       {/* <InvoiceTable search={search} /> */}
     </div>
   );

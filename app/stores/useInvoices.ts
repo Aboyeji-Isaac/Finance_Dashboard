@@ -17,6 +17,7 @@ export type InvoiceItem = {
 export type Invoice = {
   $id?: string;
   userId: string;
+  invoiceID: string;
   invoiceNumber: string;
   clientName: string;
   clientEmail: string;
@@ -73,6 +74,7 @@ export const useInvoiceStore = create<State>((set, get) => ({
       const invoices = (res.documents ?? []).map((d: any) => ({
         $id: d.$id,
         userId: d.userId,
+        invoiceID: d.invoiceID,
         invoiceNumber: d.invoiceNumber,
         clientName: d.clientName,
         clientEmail: d.clientEmail,

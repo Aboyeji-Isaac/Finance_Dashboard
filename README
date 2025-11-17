@@ -18,3 +18,4 @@ Features:
 - Add Auth (sign up / login) via Appwrite `account.createEmailSession`.
 - Add validation with `zod` and nicer components (ShadCN).
 - Add pagination, filters, CSV export, and export receipts (PDF generation).
+
